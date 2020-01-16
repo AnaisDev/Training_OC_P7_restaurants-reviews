@@ -1,0 +1,15 @@
+<div class="rating-bar">
+  <p>{{ rating }}</p>
+  <i
+    class="icon-full-circle"
+    *ngFor="let n of ratingService.fullCirclesArray"
+  ></i>
+  <i
+    class="icon-semi-circle"
+    *ngFor="let n of ratingService.semiCirclesArray"
+  ></i>
+  <i
+    class="icon-empty-circle"
+    *ngFor="let n of ratingService.emptyCirclesArray"
+  ></i>
+</div>
