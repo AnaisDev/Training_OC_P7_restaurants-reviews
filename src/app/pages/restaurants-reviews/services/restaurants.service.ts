@@ -16,6 +16,7 @@ export class RestaurantsService {
   restaurants: RestaurantInterface[];
   restaurantsToDisplay: RestaurantInterface[];
   restaurantsMarkers: any[] = [];
+  reviewFormModal: string;
 
   async initRestaurantsMap(position: GoooglePosition, mapElmt: HTMLElement) {
     this.createMap(mapElmt, position.lat, position.lng);
@@ -69,6 +70,10 @@ export class RestaurantsService {
 
   getRestaurantsToDisplay(): RestaurantInterface[] {
     return this.restaurantsToDisplay;
+  }
+
+  displayReviewForm(restaurantId) {
+    this.reviewFormModal = restaurantId;
   }
 
   private createMap(mapElement: HTMLElement, lat: number, lng: number): void {

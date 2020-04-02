@@ -6,7 +6,10 @@ import { RestaurantsListComponent } from './pages/restaurants-reviews/components
 import { RestaurantsFilterComponent } from './pages/restaurants-reviews/components/restaurantsFilter/restaurantsFilter.component';
 import { NpnSliderModule } from 'npn-slider';
 import { RatingBarComponent } from './pages/restaurants-reviews/components/ratingBar/ratingBar.component';
+import { ReviewFormComponent } from './pages/restaurants-reviews/components/reviewForm/reviewForm.component';
+import { ModalComponent } from './pages/restaurants-reviews/components/modal/modal.component';
 import { CommentsComponent } from './pages/restaurants-reviews/components/comments/comments.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     RestaurantsComponent,
@@ -15,8 +18,10 @@ import { CommentsComponent } from './pages/restaurants-reviews/components/commen
     RestaurantsFilterComponent,
     RatingBarComponent,
     CommentsComponent,
+    ReviewFormComponent,
+    ModalComponent,
   ],
-  imports: [BrowserModule, NpnSliderModule],
+  imports: [BrowserModule, NpnSliderModule, FormsModule],
   providers: [],
   bootstrap: [RestaurantsComponent],
 })

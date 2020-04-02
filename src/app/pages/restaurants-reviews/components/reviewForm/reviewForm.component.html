@@ -1,0 +1,17 @@
+<div>
+  <modal>
+    <form
+      [formGroup]="checkoutForm"
+      (ngSubmit)="onSubmit(checkoutForm.value)"
+      class="review-form"
+    >
+      <p>{{ restaurantName }}</p>
+      <h2>Ajouter un avis :</h2>
+      <label for="rating">Note : </label>
+      <input id="rating" type="number" formControlName="rating" />
+      <label for="textearea">Commentaire : </label>
+      <textarea id="comment" formControlName="comment"></textarea>
+      <button type="submit">Envoyer mon avis</button>
+    </form>
+  </modal>
+</div>

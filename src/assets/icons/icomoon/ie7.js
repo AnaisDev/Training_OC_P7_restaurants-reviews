@@ -10,12 +10,13 @@
 (function() {
 	function addIcon(el, entity) {
 		var html = el.innerHTML;
-		el.innerHTML = '<span style="font-family: \'rating-circle\'">' + entity + '</span>' + html;
+		el.innerHTML = '<span style="font-family: \'icomoon\'">' + entity + '</span>' + html;
 	}
 	var icons = {
-		'icon-semi-circle': '&#xe900;',
-		'icon-empty-circle': '&#xe901;',
-		'icon-full-circle': '&#xe902;',
+		'icon-semi-circle': '&#xe901;',
+		'icon-empty-circle': '&#xe902;',
+		'icon-full-circle': '&#xe903;',
+		'icon-plus': '&#xe900;',
 		'0': 0
 		},
 		els = document.getElementsByTagName('*'),
