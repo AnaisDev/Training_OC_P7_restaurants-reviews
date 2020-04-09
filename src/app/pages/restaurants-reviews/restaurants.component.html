@@ -1,6 +1,9 @@
 <div class="toolbar" role="banner"></div>
 
 <div class="content" role="main">
+  <restaurant-form
+    *ngIf="restaurantsService.restaurantFormModal"
+  ></restaurant-form>
   <h1 class="title">{{ title }}</h1>
   <div class="restaurants">
     <section>

@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { RestaurantsComponent } from './pages/restaurants-reviews/restaurants.component';
 import { GoogleMapComponent } from './pages/restaurants-reviews/components/googleMapRestaurants/googleMap.component';
 import { RestaurantsListComponent } from './pages/restaurants-reviews/components/restaurantsList/restaurantsList.component';
@@ -10,6 +11,9 @@ import { ReviewFormComponent } from './pages/restaurants-reviews/components/revi
 import { ModalComponent } from './pages/restaurants-reviews/components/modal/modal.component';
 import { CommentsComponent } from './pages/restaurants-reviews/components/comments/comments.component';
 import { FormsModule } from '@angular/forms';
+import { StaticStreetViewComponent } from './pages/restaurants-reviews/components/static-street-view/staticStreetView.component';
+import { RestaurantFormComponent } from './pages/restaurants-reviews/components/restaurantForm/restaurantForm.component';
+
 @NgModule({
   declarations: [
     RestaurantsComponent,
@@ -20,8 +24,10 @@ import { FormsModule } from '@angular/forms';
     CommentsComponent,
     ReviewFormComponent,
     ModalComponent,
+    RestaurantFormComponent,
+    StaticStreetViewComponent,
   ],
-  imports: [BrowserModule, NpnSliderModule, FormsModule],
+  imports: [BrowserModule, NpnSliderModule, FormsModule, HttpClientModule],
   providers: [],
   bootstrap: [RestaurantsComponent],
 })

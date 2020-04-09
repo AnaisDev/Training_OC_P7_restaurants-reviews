@@ -1,0 +1,46 @@
+<div>
+  <modal>
+    <form (ngSubmit)="addRestaurant()" class="restaurant-form">
+      <h2>Ajouter un restaurant :</h2>
+      <label for="name">Nom du restaurant : </label>
+      <input
+        id="name"
+        type="string"
+        [(ngModel)]="restaurantsService.newRestaurant.name"
+        name="name"
+        required
+      />
+      <label for="address">Adresse : </label>
+      <input
+        id="address"
+        type="string"
+        [(ngModel)]="restaurantsService.newRestaurant.address"
+        name="address"
+      />
+      <label for="rating">Note : </label>
+      <input
+        id="rating"
+        type="number"
+        [(ngModel)]="restaurantsService.newRestaurant.reviews[0].rating"
+        name="rating"
+        patern="//"
+        required
+      />
+      <label for="textearea">Commentaire : </label>
+      <textarea
+        id="comment"
+        [(ngModel)]="restaurantsService.newRestaurant.reviews[0].comment"
+        name="comment"
+      ></textarea>
+      <button type="submit">Ajouter</button>
+      <div *ngIf="error">
+        <ul *ngFor="let e of messageErrors">
+          <li class="error">{{ e }}</li>
+        </ul>
+      </div>
+      <p class="confirmation" *ngIf="confirmation">
+        Votre restaurant a bien été rajouté.
+      </p>
+    </form>
+  </modal>
+</div>

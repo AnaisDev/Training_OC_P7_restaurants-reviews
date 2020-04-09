@@ -10,10 +10,14 @@ import { RestaurantInterface } from '../../interfaces/restaurant';
 export class RestaurantsListComponent {
   constructor(private restaurantsService: RestaurantsService) {}
   rating: number;
-  displayRestaurantComments: string;
-  displayOrCloseComments(id: string) {
-    if (this.displayRestaurantComments === id) {
-      this.displayRestaurantComments = '';
-    } else this.displayRestaurantComments = id;
+  displayRestaurantDetails: string;
+  async displayOrCloseRestaurantDetails(restaurant: RestaurantInterface) {
+    await this.restaurantsService.fetchStreetView(
+      restaurant.lat,
+      restaurant.long,
+    );
+    if (this.displayRestaurantDetails === restaurant.id) {
+      this.displayRestaurantDetails = '';
+    } else this.displayRestaurantDetails = restaurant.id;
   }
 }

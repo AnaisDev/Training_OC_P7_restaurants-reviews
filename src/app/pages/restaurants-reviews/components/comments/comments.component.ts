@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Review } from '../../interfaces/review';
+import { ReviewInterface } from '../../interfaces/review';
 
 @Component({
   selector: 'comments',
@@ -7,6 +7,6 @@ import { Review } from '../../interfaces/review';
   styleUrls: ['./comments.component.styl'],
 })
 export class CommentsComponent {
-  @Input() reviews: Review[];
+  @Input() reviews: ReviewInterface[];
   @Input() restaurantId: string;
 }

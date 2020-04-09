@@ -1,4 +1,4 @@
-import { Review } from './review';
+import { ReviewInterface } from './review';
 
 export interface RestaurantInterface {
   id: string;
@@ -6,7 +6,7 @@ export interface RestaurantInterface {
   address?: string;
   lat: number;
   long: number;
-  reviews: Review[];
+  reviews: ReviewInterface[];
 }
 /*
 

@@ -1,4 +1,4 @@
-export interface GoooglePosition {
+export interface GooglePosition {
   lat: number;
   lng: number;
 }

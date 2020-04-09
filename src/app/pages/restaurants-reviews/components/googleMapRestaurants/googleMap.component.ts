@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { RestaurantsService } from '../../services/restaurants.service';
 import { NavigatorPosition } from '../../interfaces/navigatorPosition';
-import { GoooglePosition } from '../../interfaces/googlePosition';
+import { GooglePosition } from '../../interfaces/googlePosition';
 @Component({
   selector: 'google-map',
   templateUrl: './googleMap.component.html',
@@ -11,7 +11,7 @@ import { GoooglePosition } from '../../interfaces/googlePosition';
 export class GoogleMapComponent {
   latitude: number = 47.9184676;
   longitude: number = 106.9177016;
-  position: GoooglePosition = { lat: this.latitude, lng: this.longitude };
+  position: GooglePosition = { lat: this.latitude, lng: this.longitude };
   mapElement: HTMLElement;
 
   constructor(private restaurantsService: RestaurantsService) {}

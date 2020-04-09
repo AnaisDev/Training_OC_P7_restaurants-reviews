@@ -1,17 +1,29 @@
 <div>
   <modal>
-    <form
-      [formGroup]="checkoutForm"
-      (ngSubmit)="onSubmit(checkoutForm.value)"
-      class="review-form"
-    >
-      <p>{{ restaurantName }}</p>
+    <form (ngSubmit)="addRestaurantReview()" class="review-form">
+      <p>{{ restaurant.name }}</p>
       <h2>Ajouter un avis :</h2>
       <label for="rating">Note : </label>
-      <input id="rating" type="number" formControlName="rating" />
+      <input
+        id="rating"
+        type="number"
+        [(ngModel)]="review.rating"
+        name="rating"
+        patern="//"
+        required
+      />
       <label for="textearea">Commentaire : </label>
-      <textarea id="comment" formControlName="comment"></textarea>
+      <textarea
+        id="comment"
+        [(ngModel)]="review.comment"
+        name="comment"
+        required
+      ></textarea>
       <button type="submit">Envoyer mon avis</button>
+      <p class="error" *ngIf="error">{{ messageError }}</p>
+      <p class="confirmation" *ngIf="confirmation">
+        Votre avis a bien été rajouté.
+      </p>
     </form>
   </modal>
 </div>

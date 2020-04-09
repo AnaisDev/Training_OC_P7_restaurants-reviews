@@ -1,24 +1,28 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { defaultRestaurants } from '../data/defaultRestaurants';
 import { RestaurantInterface } from '../interfaces/restaurant';
 import { Marker } from '../interfaces/marker';
-import { GoooglePosition } from '../interfaces/googlePosition';
-import { Review } from '../interfaces/review';
-import { CATCH_ERROR_VAR } from '@angular/compiler/src/output/output_ast';
+import { GooglePosition } from '../interfaces/googlePosition';
+import { ReviewInterface } from '../interfaces/review';
+import { Restaurant } from '../class/restaurant';
+import { googleApiKey } from 'envTest';
+import { JsonPipe } from '@angular/common';
 @Injectable({
   providedIn: 'root',
 })
 export class RestaurantsService {
-  constructor() {}
-
+  constructor(private http: HttpClient) {}
   map: google.maps.Map;
   service: google.maps.places.PlacesService;
   restaurants: RestaurantInterface[];
   restaurantsToDisplay: RestaurantInterface[];
   restaurantsMarkers: any[] = [];
   reviewFormModal: string;
+  restaurantFormModal: boolean = false;
+  newRestaurant: Restaurant = new Restaurant();
 
-  async initRestaurantsMap(position: GoooglePosition, mapElmt: HTMLElement) {
+  async initRestaurantsMap(position: GooglePosition, mapElmt: HTMLElement) {
     this.createMap(mapElmt, position.lat, position.lng);
     this.createUserMarker(position);
     try {
@@ -32,7 +36,7 @@ export class RestaurantsService {
   createRestaurantsMarkers() {
     if (!this.restaurantsToDisplay || this.restaurantsToDisplay.length === 0)
       return;
-    this.restaurantsToDisplay.forEach(restaurant => {
+    this.restaurantsToDisplay.forEach((restaurant) => {
       const marker = this.createMarker(
         { lat: restaurant.lat, lng: restaurant.long },
         restaurant.name,
@@ -42,7 +46,7 @@ export class RestaurantsService {
   }
 
   deleteMarkers() {
-    this.restaurantsMarkers.forEach(marker => {
+    this.restaurantsMarkers.forEach((marker) => {
       marker.setMap(null);
     });
   }
@@ -62,7 +66,7 @@ export class RestaurantsService {
 
   filterRestaurantsToDisplay(min: number, max: number): RestaurantInterface[] {
     if (!this.restaurants) return;
-    this.restaurantsToDisplay = this.restaurants.filter(restaurant => {
+    this.restaurantsToDisplay = this.restaurants.filter((restaurant) => {
       const ratingsAverage = this.getRatingsAverage(restaurant);
       return ratingsAverage >= min && ratingsAverage <= max;
     });
@@ -76,10 +80,85 @@ export class RestaurantsService {
     this.reviewFormModal = restaurantId;
   }
 
+  addRestaurantReview(
+    restaurant: RestaurantInterface,
+    review: ReviewInterface,
+  ) {
+    const i = this.restaurants.findIndex((r) => r.id === restaurant.id);
+    this.restaurants[i].reviews.push(review);
+    this.restaurantsToDisplay = this.restaurants;
+    setTimeout(() => {
+      this.reviewFormModal = '';
+    }, 1000);
+  }
+
+  addRestaurant(restaurant: RestaurantInterface) {
+    this.restaurants.push(restaurant);
+    this.restaurantsToDisplay = this.restaurants;
+    this.createRestaurantsMarkers();
+    setTimeout(() => {
+      this.restaurantFormModal = false;
+    }, 1000);
+  }
+
+  returnReviewFormatError(review: ReviewInterface): string | undefined {
+    console.log('name', this.newRestaurant.reviews);
+    const badRatingFormat =
+      review.rating === undefined ||
+      review.rating === null ||
+      review.rating > 5 ||
+      review.rating < 0;
+
+    if (badRatingFormat)
+      return 'Veuillez renseignez un nombre entre 0 et 5 pour la note.';
+  }
+
+  returnRestaurantFormatError(): string[] | undefined {
+    const errors = [];
+    const badName = this.newRestaurant.name === '';
+    const badReview = this.returnReviewFormatError(
+      this.newRestaurant.reviews[0],
+    );
+    console.log('newRestaurant', this.newRestaurant);
+    if (badName) errors.push('Veuillez renseigner le nom du restaurant');
+    if (badReview) errors.push(badReview);
+    return errors;
+  }
+
+  async fetchStreetView(lat: number, lng: number) {
+    console.log('fetch street view');
+    const staticStreetViewApiUrl =
+      'https://maps.googleapis.com/maps/api/streetview';
+    const params = new HttpParams()
+      .set('key', googleApiKey)
+      .set('size', '600x300')
+      .set('location', `${lat}, ${lng}`);
+
+    console.log('params', params.toString());
+    const options = {
+      observe: 'body' as 'body',
+      params,
+      responseType: 'json' as 'json',
+    };
+
+    // const streetViewApiRequest: string = `https://maps.googleapis.com/maps/api/streetview?size=${request.size}&location=${request.location}&key=${googleApiKey}`;
+    // &signature=${GOOGLE_SIGNATURE}
+    //const res = await this.http.request('GET', staticStreetViewApiUrl, options);
+    const res = await this.http.get<any>(staticStreetViewApiUrl, options);
+    console.log('res', res);
+  }
+
   private createMap(mapElement: HTMLElement, lat: number, lng: number): void {
     this.map = new google.maps.Map(mapElement, {
       center: { lat, lng },
       zoom: 10,
+    });
+    this.map.addListener('click', (e) => {
+      this.newRestaurant = new Restaurant();
+      console.log('this restau', this.newRestaurant);
+      this.newRestaurant.lat = e.latLng.lat();
+      this.newRestaurant.long = e.latLng.lng();
+      this.restaurantFormModal = true;
     });
   }
 
@@ -122,7 +201,7 @@ export class RestaurantsService {
               async (
                 r: google.maps.places.PlaceResult,
               ): Promise<RestaurantInterface> => {
-                let reviews: Review[];
+                let reviews: ReviewInterface[];
                 try {
                   reviews = await this.detailsGoogleRestaurant(r, this.service);
                 } catch (e) {
@@ -151,21 +230,21 @@ export class RestaurantsService {
   private async detailsGoogleRestaurant(
     restaurant: google.maps.places.PlaceResult,
     googleService: google.maps.places.PlacesService,
-  ): Promise<Review[]> {
+  ): Promise<ReviewInterface[]> {
     return new Promise((resolve, reject) => {
       const requestRestaurantDetails: any = {
         placeId: restaurant.place_id,
         fields: ['reviews'],
       };
 
-      let reviews: Review[] = [];
+      let reviews: ReviewInterface[] = [];
       googleService.getDetails(
         requestRestaurantDetails,
         async (results, status) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
             reviews = await Promise.all(
               results.reviews.map(
-                async (review: any): Promise<Review> => {
+                async (review: any): Promise<ReviewInterface> => {
                   return { rating: review.rating, comment: review.text };
                 },
               ),
