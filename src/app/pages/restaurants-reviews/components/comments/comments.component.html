@@ -1,0 +1,6 @@
+<div class="comments">
+  <div *ngFor="let review of reviews">
+    <rating-bar [rating]="review.rating"></rating-bar>
+    <p>{{ review.comment }}</p>
+  </div>
+</div>
