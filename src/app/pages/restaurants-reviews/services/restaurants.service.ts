@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { defaultRestaurants } from '../data/defaultRestaurants';
 import { RestaurantInterface } from '../interfaces/restaurant';
 import { Marker } from '../interfaces/marker';
@@ -7,7 +7,9 @@ import { GooglePosition } from '../interfaces/googlePosition';
 import { ReviewInterface } from '../interfaces/review';
 import { Restaurant } from '../class/restaurant';
 import { googleApiKey } from 'envTest';
-import { JsonPipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { TestBed } from '@angular/core/testing';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +23,7 @@ export class RestaurantsService {
   reviewFormModal: string;
   restaurantFormModal: boolean = false;
   newRestaurant: Restaurant = new Restaurant();
+  streetView: string;
 
   async initRestaurantsMap(position: GooglePosition, mapElmt: HTMLElement) {
     this.createMap(mapElmt, position.lat, position.lng);
@@ -102,7 +105,6 @@ export class RestaurantsService {
   }
 
   returnReviewFormatError(review: ReviewInterface): string | undefined {
-    console.log('name', this.newRestaurant.reviews);
     const badRatingFormat =
       review.rating === undefined ||
       review.rating === null ||
@@ -119,33 +121,21 @@ export class RestaurantsService {
     const badReview = this.returnReviewFormatError(
       this.newRestaurant.reviews[0],
     );
-    console.log('newRestaurant', this.newRestaurant);
     if (badName) errors.push('Veuillez renseigner le nom du restaurant');
     if (badReview) errors.push(badReview);
     return errors;
   }
 
-  async fetchStreetView(lat: number, lng: number) {
-    console.log('fetch street view');
+  fetchStreetViewUrl(lat: number, lng: number) {
     const staticStreetViewApiUrl =
       'https://maps.googleapis.com/maps/api/streetview';
+
     const params = new HttpParams()
       .set('key', googleApiKey)
       .set('size', '600x300')
       .set('location', `${lat}, ${lng}`);
 
-    console.log('params', params.toString());
-    const options = {
-      observe: 'body' as 'body',
-      params,
-      responseType: 'json' as 'json',
-    };
-
-    // const streetViewApiRequest: string = `https://maps.googleapis.com/maps/api/streetview?size=${request.size}&location=${request.location}&key=${googleApiKey}`;
-    // &signature=${GOOGLE_SIGNATURE}
-    //const res = await this.http.request('GET', staticStreetViewApiUrl, options);
-    const res = await this.http.get<any>(staticStreetViewApiUrl, options);
-    console.log('res', res);
+    return `${staticStreetViewApiUrl}?${params.toString()}`;
   }
 
   private createMap(mapElement: HTMLElement, lat: number, lng: number): void {
@@ -155,7 +145,6 @@ export class RestaurantsService {
     });
     this.map.addListener('click', (e) => {
       this.newRestaurant = new Restaurant();
-      console.log('this restau', this.newRestaurant);
       this.newRestaurant.lat = e.latLng.lat();
       this.newRestaurant.long = e.latLng.lng();
       this.restaurantFormModal = true;
@@ -221,7 +210,6 @@ export class RestaurantsService {
         }
 
         this.restaurantsToDisplay = this.restaurants;
-        console.log(this.restaurantsToDisplay);
         resolve(this.restaurantsToDisplay);
       });
     });

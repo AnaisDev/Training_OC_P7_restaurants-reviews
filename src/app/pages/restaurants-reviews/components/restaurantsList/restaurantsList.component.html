@@ -29,8 +29,7 @@
         ></review-form>
         <div *ngIf="displayRestaurantDetails === restaurant.id">
           <static-street-view
-            [lat]="restaurant.lat"
-            [lng]="restaurant.long"
+            [staticStreetViewUrl]="staticStreetViewUrl"
           ></static-street-view>
           <comments [reviews]="restaurant.reviews"></comments>
         </div>

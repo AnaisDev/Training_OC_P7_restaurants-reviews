@@ -8,8 +8,7 @@ import { RestaurantsService } from '../../services/restaurants.service';
   styleUrls: ['./staticStreetView.component.styl'],
 })
 export class StaticStreetViewComponent {
-  @Input() lat: number;
-  @Input() lng: number;
+  @Input() staticStreetViewUrl: string;
 
   constructor(private restaurantsService: RestaurantsService) {}
 

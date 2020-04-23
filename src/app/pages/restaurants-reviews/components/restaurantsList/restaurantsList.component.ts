@@ -11,11 +11,14 @@ export class RestaurantsListComponent {
   constructor(private restaurantsService: RestaurantsService) {}
   rating: number;
   displayRestaurantDetails: string;
-  async displayOrCloseRestaurantDetails(restaurant: RestaurantInterface) {
-    await this.restaurantsService.fetchStreetView(
+  staticStreetViewUrl: string = '';
+
+  displayOrCloseRestaurantDetails(restaurant: RestaurantInterface) {
+    this.staticStreetViewUrl = this.restaurantsService.fetchStreetViewUrl(
       restaurant.lat,
       restaurant.long,
     );
+    console.log(' this.staticStreetViewUrl', this.staticStreetViewUrl);
     if (this.displayRestaurantDetails === restaurant.id) {
       this.displayRestaurantDetails = '';
     } else this.displayRestaurantDetails = restaurant.id;
