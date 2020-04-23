@@ -1,0 +1,8 @@
+<div class="rating-bar">
+  <p>{{ rating }}</p>
+  <div>
+    <i class="icon-full-circle" *ngFor="let n of ratingBar.fullIcons"></i>
+    <i class="icon-semi-circle" *ngFor="let n of ratingBar.semiIcons"></i>
+    <i class="icon-empty-circle" *ngFor="let n of ratingBar.emptyIcons"></i>
+  </div>
+</div>

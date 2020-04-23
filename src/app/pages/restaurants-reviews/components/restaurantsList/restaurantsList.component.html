@@ -1,0 +1,39 @@
+<div class="restaurants-list">
+  <ul *ngFor="let restaurant of restaurantsService.getRestaurantsToDisplay()">
+    <li>
+      <header>
+        <div
+          class="title"
+          (click)="displayOrCloseRestaurantDetails(restaurant)"
+        >
+          {{ restaurant.name
+          }}<rating-bar
+            *ngIf="restaurant.reviews.length > 0; else noReviews"
+            class="average"
+            [rating]="restaurantsService.getRatingsAverage(restaurant)"
+          ></rating-bar>
+          <ng-template #noReviews
+            ><p>(Ce restaurant n'a pas encore été noté )</p></ng-template
+          >
+        </div>
+        <i
+          class="icon-plus"
+          title="Ajouter un avis"
+          (click)="restaurantsService.displayReviewForm(restaurant.id)"
+        ></i>
+      </header>
+      <body>
+        <review-form
+          *ngIf="restaurantsService.reviewFormModal === restaurant.id"
+          [restaurant]="restaurant"
+        ></review-form>
+        <div *ngIf="displayRestaurantDetails === restaurant.id">
+          <static-street-view
+            [staticStreetViewUrl]="staticStreetViewUrl"
+          ></static-street-view>
+          <comments [reviews]="restaurant.reviews"></comments>
+        </div>
+      </body>
+    </li>
+  </ul>
+</div>
