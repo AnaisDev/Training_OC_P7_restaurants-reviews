@@ -1,22 +1,21 @@
-<div class="toolbar" role="banner">
-  <section>
-    <h1 class="title">{{ title }}</h1>
-    <restaurants-filter></restaurants-filter>
-    <google-map
-      (restaurantsToDisplayEvent)="setRestaurantsToDisplay($event)"
-    ></google-map>
-  </section>
-</div>
+<section class="map-section">
+  <h1 class="title"><i class="icon-spoon-knife"></i>{{ title }}</h1>
+  <restaurants-filter></restaurants-filter>
+  <google-map
+    (restaurantsToDisplayEvent)="setRestaurantsToDisplay($event)"
+  ></google-map>
+</section>
 
-<div class="content" role="main">
-  <restaurant-form
-    *ngIf="restaurantsService.restaurantFormModal"
-  ></restaurant-form>
+<section class="restaurants-section">
+  <modal
+    [isOpen]="restaurantsService.restaurantFormModal"
+    (close)="restaurantsService.restaurantFormModal = false"
+  >
+    <h2 modalHeader>Ajouter un restaurant :</h2>
+    <restaurant-form modalContent></restaurant-form>
+  </modal>
 
   <div class="restaurants">
     <restaurants-list></restaurants-list>
   </div>
-
-  <!-- Footer -->
-  <footer></footer>
-</div>
+</section>

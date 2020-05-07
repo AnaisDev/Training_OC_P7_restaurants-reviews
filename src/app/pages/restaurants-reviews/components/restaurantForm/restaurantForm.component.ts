@@ -39,4 +39,8 @@ export class RestaurantFormComponent {
     this.confirmation = true;
     this.restaurantsService.newRestaurant = new Restaurant();
   }
+
+  ngOnDestroy() {
+    this.confirmation = false;
+  }
 }

@@ -1,5 +1,5 @@
 // /// <reference types="@types/googlemaps" />
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'modal',
@@ -7,5 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./modal.component.styl'],
 })
 export class ModalComponent {
+  @Output() close: EventEmitter<any> = new EventEmitter();
+  @Input() isOpen: boolean;
   constructor() {}
+
+  closeModal() {
+    this.close.emit(null);
+  }
 }
