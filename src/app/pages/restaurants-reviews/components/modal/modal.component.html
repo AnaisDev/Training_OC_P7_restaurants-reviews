@@ -1,3 +1,13 @@
-<div class="modal">
-  <div class="content"><ng-content></ng-content></div>
+<div class="background-modal" *ngIf="isOpen">
+  <div class="modal">
+    <header>
+      <div class="title">
+        <ng-content select="[modalHeader]"></ng-content>
+      </div>
+      <button type="button" (click)="closeModal()">X</button>
+    </header>
+    <div class="content">
+      <ng-content select="[modalContent]"></ng-content>
+    </div>
+  </div>
 </div>

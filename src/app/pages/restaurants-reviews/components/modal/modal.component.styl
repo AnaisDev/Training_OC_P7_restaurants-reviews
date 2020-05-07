@@ -1,6 +1,6 @@
 @import './../../../../../variables';
 
-.modal {
+.background-modal {
     display: grid;
     justify-items: center;
     align-items: center;
@@ -12,11 +12,41 @@
     height: 100%;
     z-index: 1000;
 
-    .content {
+    .modal{
         width: 350px;
-        border: 3px solid #262626;
         border-radius: 11px;
-        background-color: $backgroundColor;
-        padding: 15px;
+        background-color: $lightGray;
+        box-shadow: 5px 5px 2px 1px black;
+
+        header{
+            display: flex;
+            justify-content: space-between;
+            background-color: $green;
+            color: white;
+            padding: 0 15px; 
+            border-radius: 11px 11px 0 0;
+            box-shadow: 0 3px 7px 1px $darkGreen;
+            margin-bottom:15px;
+
+            .title{
+                font-size: 0.8em;    
+            }
+
+            button{
+                background: none;
+                border: none;
+                color: white;
+            }
+
+            button:hover{
+                cursor:pointer;
+                text-shadow: 2px 2px 1px black;
+            }
+
+        }
+
+        .content {
+            padding: 15px;
+        }
     }
 }

@@ -41,4 +41,8 @@ export class ReviewFormComponent {
 
     this.review = {};
   }
+
+  ngOnDestroy() {
+    this.confirmation = false;
+  }
 }

@@ -18,7 +18,6 @@ export class RestaurantsListComponent {
       restaurant.lat,
       restaurant.long,
     );
-    console.log(' this.staticStreetViewUrl', this.staticStreetViewUrl);
     if (this.displayRestaurantDetails === restaurant.id) {
       this.displayRestaurantDetails = '';
     } else this.displayRestaurantDetails = restaurant.id;

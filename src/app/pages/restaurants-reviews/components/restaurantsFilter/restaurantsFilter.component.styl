@@ -1,3 +1,29 @@
+@import './../../../../../variables';
+
 .restaurants-filter {
     margin: 0 0 15px 0;
 }
+
+.custom-npn-slider::ng-deep{
+    .slider {
+        .bar{
+            .filler {
+                span{
+                    background:$lightGreen!important;     
+                }
+                .step-indicators span{
+                    background: $darkGreen!important;
+                }
+            }
+            .left-handle, .right-handle{
+                background: $darkGreen!important;
+                border: 7px solid $lightGreen!important;
+                box-shadow:0 0 2px $darkGreen;
+            }
+        }
+        .values{
+            padding-top:5px;
+            }
+    }
+}
+  

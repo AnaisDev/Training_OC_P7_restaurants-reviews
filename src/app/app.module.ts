@@ -13,6 +13,7 @@ import { CommentsComponent } from './pages/restaurants-reviews/components/commen
 import { FormsModule } from '@angular/forms';
 import { StaticStreetViewComponent } from './pages/restaurants-reviews/components/static-street-view/staticStreetView.component';
 import { RestaurantFormComponent } from './pages/restaurants-reviews/components/restaurantForm/restaurantForm.component';
+import { ButtonComponent } from './pages/restaurants-reviews/components/button/button.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { RestaurantFormComponent } from './pages/restaurants-reviews/components/
     ModalComponent,
     RestaurantFormComponent,
     StaticStreetViewComponent,
+    ButtonComponent,
   ],
   imports: [BrowserModule, NpnSliderModule, FormsModule, HttpClientModule],
   providers: [],

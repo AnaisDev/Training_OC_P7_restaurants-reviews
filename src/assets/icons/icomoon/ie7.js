@@ -17,6 +17,9 @@
 		'icon-empty-circle': '&#xe902;',
 		'icon-full-circle': '&#xe903;',
 		'icon-plus': '&#xe900;',
+		'icon-bubbles3': '&#xe96f;',
+		'icon-spoon-knife': '&#xe9a3;',
+		'icon-chevron-bottom': '&#xe904;',
 		'0': 0
 		},
 		els = document.getElementsByTagName('*'),

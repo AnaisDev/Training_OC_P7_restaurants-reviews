@@ -1,12 +1,21 @@
 @import './../../../variables';
 
 :host {
+  font-family: Arial, Helvetica, sans-serif;
   display: flex;
-  background-color: $grayLight;
+  background-color: $lightGray;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-.content {
+.map-section {
+  margin: 25px;
+}
+
+.restaurants-section {
+  overflow: scroll;
+  height: 100vh;
+  scrollbar-width: thin;
 }
 
 .restaurants {
@@ -17,10 +26,15 @@
 }
 
 .title {
-  color: $textColor;
+  color: $green;
   font-family: AsapSymbol, Arial, Helvetica, sans-serif;
   margin-top: 0;
   font-size: 1.5em;
+
+  .icon-spoon-knife {
+    color: $darkGreen;
+    padding-right: 5px;
+  }
 }
 
 restaurants-list {
