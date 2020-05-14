@@ -7,9 +7,7 @@ import { GooglePosition } from '../interfaces/googlePosition';
 import { ReviewInterface } from '../interfaces/review';
 import { Restaurant } from '../class/restaurant';
 import { googleApiKey } from 'envTest';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { TestBed } from '@angular/core/testing';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -25,6 +23,12 @@ export class RestaurantsService {
   newRestaurant: Restaurant = new Restaurant();
   streetView: string;
 
+  /**
+   * Display gogole map with :
+   * - user marker
+   * - restaurants marker
+   * - adding restaurant form onclick ont the map
+   */
   async initRestaurantsMap(position: GooglePosition, mapElmt: HTMLElement) {
     this.createMap(mapElmt, position.lat, position.lng);
     this.createUserMarker(position);
@@ -138,10 +142,14 @@ export class RestaurantsService {
     return `${staticStreetViewApiUrl}?${params.toString()}`;
   }
 
+  /**
+   * Create a google map
+   * with adding restaurant form  on click
+   */
   private createMap(mapElement: HTMLElement, lat: number, lng: number): void {
     this.map = new google.maps.Map(mapElement, {
       center: { lat, lng },
-      zoom: 10,
+      zoom: 13,
     });
     this.map.addListener('click', (e) => {
       this.newRestaurant = new Restaurant();
@@ -151,8 +159,12 @@ export class RestaurantsService {
     });
   }
 
+  /**
+   * Create a marker on  the map
+   * with text and image
+   */
   private createMarker(
-    position: object,
+    position: GooglePosition,
     title: string,
     icon?: string,
   ): google.maps.Marker {
@@ -165,17 +177,23 @@ export class RestaurantsService {
     return new google.maps.Marker(marker);
   }
 
-  private createUserMarker(position) {
+  /**
+   * Create user marker on the map
+   */
+  private createUserMarker(position: GooglePosition): void {
     const personImg: string = 'assets/person.png';
     this.createMarker(position, 'Vous êtes ici', personImg);
   }
 
+  /**
+   * Fetch restaurants to display on the google map
+   */
   private async fetchRestaurants(
-    position: object,
+    position: GooglePosition,
   ): Promise<RestaurantInterface[]> {
     const request: object = {
       location: position,
-      radius: '10000',
+      radius: '5000',
       type: ['restaurant'],
     };
     this.service = new google.maps.places.PlacesService(this.map);
@@ -183,7 +201,7 @@ export class RestaurantsService {
     return new Promise((resolve, reject) => {
       this.service.nearbySearch(request, async (results, status) => {
         if (status !== 'OK') {
-          this.restaurants = defaultRestaurants;
+          this.restaurants = this.filterRestaurantsByPosition(position);
         } else {
           const googleRestaurants = await Promise.all(
             results.map(
@@ -206,7 +224,9 @@ export class RestaurantsService {
               },
             ),
           );
-          this.restaurants = googleRestaurants.concat(defaultRestaurants);
+          this.restaurants = googleRestaurants.concat(
+            this.filterRestaurantsByPosition(position),
+          );
         }
 
         this.restaurantsToDisplay = this.restaurants;
@@ -244,5 +264,21 @@ export class RestaurantsService {
         },
       );
     });
+  }
+
+  /**
+   * Filter default restaurants by position
+   */
+  private filterRestaurantsByPosition(
+    userPosition: GooglePosition,
+  ): RestaurantInterface[] {
+    const latMin = userPosition.lat - 0.1;
+    const latMax = userPosition.lat + 0.1;
+    const lngMin = userPosition.lng - 0.5;
+    const lngMax = userPosition.lng + 0.5;
+    return defaultRestaurants.filter(
+      (r) =>
+        r.lat > latMin && r.lat < latMax && r.long > lngMin && r.long < lngMax,
+    );
   }
 }

@@ -17,9 +17,6 @@ export class GoogleMapComponent {
   constructor(private restaurantsService: RestaurantsService) {}
 
   async ngOnInit(): Promise<void> {
-    /*this.setUserPosition();
-    this.createMap();
-    this.createUserMarker();*/
     await this.createRestaurantsMap();
   }
 
@@ -33,6 +30,10 @@ export class GoogleMapComponent {
     }
   }
 
+  /**
+   * If the user accept geolocation,
+   * we create a google map according to the geolocation of the user
+   */
   private restaurantsMapWithGeolocation = async (
     pos: NavigatorPosition,
   ): Promise<any> => {
@@ -43,6 +44,10 @@ export class GoogleMapComponent {
     );
   };
 
+  /**
+   * If the user don't accept geolocation
+   * We create google map in Oulan Bator
+   */
   private restaurantsMapWithoutGeolocation = async (
     e: object,
   ): Promise<void> => {
