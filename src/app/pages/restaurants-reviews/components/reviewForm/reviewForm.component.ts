@@ -39,10 +39,10 @@ export class ReviewFormComponent {
     this.restaurantsService.addRestaurantReview(this.restaurant, this.review);
     this.confirmation = true;
 
-    this.review = {};
-  }
-
-  ngOnDestroy() {
-    this.confirmation = false;
+    setTimeout(() => {
+      this.confirmation = false;
+      this.review = {};
+      this.restaurantsService.reviewFormModal = '';
+    }, 1000);
   }
 }

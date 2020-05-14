@@ -94,18 +94,12 @@ export class RestaurantsService {
     const i = this.restaurants.findIndex((r) => r.id === restaurant.id);
     this.restaurants[i].reviews.push(review);
     this.restaurantsToDisplay = this.restaurants;
-    setTimeout(() => {
-      this.reviewFormModal = '';
-    }, 1000);
   }
 
   addRestaurant(restaurant: RestaurantInterface) {
     this.restaurants.push(restaurant);
     this.restaurantsToDisplay = this.restaurants;
     this.createRestaurantsMarkers();
-    setTimeout(() => {
-      this.restaurantFormModal = false;
-    }, 1000);
   }
 
   returnReviewFormatError(review: ReviewInterface): string | undefined {
