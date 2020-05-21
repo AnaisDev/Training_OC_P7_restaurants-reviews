@@ -37,10 +37,11 @@ export class RestaurantFormComponent {
       this.restaurantsService.newRestaurant,
     );
     this.confirmation = true;
-    this.restaurantsService.newRestaurant = new Restaurant();
-  }
 
-  ngOnDestroy() {
-    this.confirmation = false;
+    setTimeout(() => {
+      this.confirmation = false;
+      this.restaurantsService.newRestaurant = new Restaurant();
+      this.restaurantsService.restaurantFormModal = false;
+    }, 1000);
   }
 }
