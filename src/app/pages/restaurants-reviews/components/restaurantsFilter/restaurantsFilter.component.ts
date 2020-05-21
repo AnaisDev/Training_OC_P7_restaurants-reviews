@@ -11,7 +11,7 @@ import { RestaurantsService } from '../../services/restaurants.service';
 export class RestaurantsFilterComponent {
   constructor(private restaurantsService: RestaurantsService) {}
   filterRestaurants(selectedValues: number[]): void {
-    this.restaurantsService.filterRestaurantsToDisplay(
+    this.restaurantsService.filterRestaurantsAverageToDisplay(
       selectedValues[0],
       selectedValues[1],
     );

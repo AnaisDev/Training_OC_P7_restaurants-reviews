@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { defaultRestaurants } from '../data/defaultRestaurants';
 import { RestaurantInterface } from '../interfaces/restaurant';
 import { Marker } from '../interfaces/marker';
@@ -24,7 +24,7 @@ export class RestaurantsService {
   streetView: string;
 
   /**
-   * Display gogole map with :
+   * Display google map with :
    * - user marker
    * - restaurants marker
    * - adding restaurant form onclick ont the map
@@ -40,7 +40,7 @@ export class RestaurantsService {
     }
   }
 
-  createRestaurantsMarkers() {
+  createRestaurantsMarkers(): void {
     if (!this.restaurantsToDisplay || this.restaurantsToDisplay.length === 0)
       return;
     this.restaurantsToDisplay.forEach((restaurant) => {
@@ -52,7 +52,7 @@ export class RestaurantsService {
     });
   }
 
-  deleteMarkers() {
+  deleteMarkers(): void {
     this.restaurantsMarkers.forEach((marker) => {
       marker.setMap(null);
     });
@@ -62,7 +62,7 @@ export class RestaurantsService {
     return this.restaurants;
   }
 
-  getRatingsAverage(restaurant: RestaurantInterface): Number {
+  getRatingsAverage(restaurant: RestaurantInterface): number {
     if (restaurant.reviews.length === 0) return 0;
     const sumRatingStars = restaurant.reviews.reduce((acc, review) => {
       return acc + review.rating;
@@ -71,7 +71,10 @@ export class RestaurantsService {
     return Math.round(average * 10) / 10;
   }
 
-  filterRestaurantsToDisplay(min: number, max: number): RestaurantInterface[] {
+  filterRestaurantsAverageToDisplay(
+    min: number,
+    max: number,
+  ): RestaurantInterface[] {
     if (!this.restaurants) return;
     this.restaurantsToDisplay = this.restaurants.filter((restaurant) => {
       const ratingsAverage = this.getRatingsAverage(restaurant);
@@ -83,25 +86,34 @@ export class RestaurantsService {
     return this.restaurantsToDisplay;
   }
 
-  displayReviewForm(restaurantId) {
+  /**
+   To display the form to add a restaurant review
+   */
+  displayReviewForm(restaurantId: string): void {
     this.reviewFormModal = restaurantId;
   }
 
+  /**
+   To display the form to add a review
+   */
   addRestaurantReview(
     restaurant: RestaurantInterface,
     review: ReviewInterface,
-  ) {
+  ): void {
     const i = this.restaurants.findIndex((r) => r.id === restaurant.id);
     this.restaurants[i].reviews.push(review);
     this.restaurantsToDisplay = this.restaurants;
   }
 
-  addRestaurant(restaurant: RestaurantInterface) {
+  addRestaurant(restaurant: RestaurantInterface): void {
     this.restaurants.push(restaurant);
     this.restaurantsToDisplay = this.restaurants;
     this.createRestaurantsMarkers();
   }
 
+  /**
+   * Check user data int the add review restaurant form
+   */
   returnReviewFormatError(review: ReviewInterface): string | undefined {
     const badRatingFormat =
       review.rating === undefined ||
@@ -113,6 +125,9 @@ export class RestaurantsService {
       return 'Veuillez renseignez un nombre entre 0 et 5 pour la note.';
   }
 
+  /**
+   * Check user data int the add restaurant form
+   */
   returnRestaurantFormatError(): string[] | undefined {
     const errors = [];
     const badName = this.newRestaurant.name === '';
@@ -124,7 +139,10 @@ export class RestaurantsService {
     return errors;
   }
 
-  fetchStreetViewUrl(lat: number, lng: number) {
+  /**
+   * Return the static street view url
+   */
+  fetchStreetViewUrl(lat: number, lng: number): string {
     const staticStreetViewApiUrl =
       'https://maps.googleapis.com/maps/api/streetview';
 
@@ -195,8 +213,10 @@ export class RestaurantsService {
     return new Promise((resolve, reject) => {
       this.service.nearbySearch(request, async (results, status) => {
         if (status !== 'OK') {
+          // If we have an error,we return default restaurants filtered according to the user's position.
           this.restaurants = this.filterRestaurantsByPosition(position);
         } else {
+          // Else we search reviews foreach restaurant
           const googleRestaurants = await Promise.all(
             results.map(
               async (
@@ -204,10 +224,11 @@ export class RestaurantsService {
               ): Promise<RestaurantInterface> => {
                 let reviews: ReviewInterface[];
                 try {
-                  reviews = await this.detailsGoogleRestaurant(r, this.service);
+                  reviews = await this.fetchReviewsRestaurant(r, this.service);
                 } catch (e) {
                   reviews = [];
                 }
+                // We return formated restaurant
                 return {
                   id: r.id,
                   name: r.name,
@@ -218,6 +239,7 @@ export class RestaurantsService {
               },
             ),
           );
+          // We add the restaurants by default filtered according to the user's position
           this.restaurants = googleRestaurants.concat(
             this.filterRestaurantsByPosition(position),
           );
@@ -229,7 +251,10 @@ export class RestaurantsService {
     });
   }
 
-  private async detailsGoogleRestaurant(
+  /**
+   * Search reviews restaurant
+   */
+  private async fetchReviewsRestaurant(
     restaurant: google.maps.places.PlaceResult,
     googleService: google.maps.places.PlacesService,
   ): Promise<ReviewInterface[]> {
@@ -243,15 +268,15 @@ export class RestaurantsService {
       googleService.getDetails(
         requestRestaurantDetails,
         async (results, status) => {
+          // If the googleService have sent reviews
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-            reviews = await Promise.all(
-              results.reviews.map(
-                async (review: any): Promise<ReviewInterface> => {
-                  return { rating: review.rating, comment: review.text };
-                },
-              ),
-            );
-            resolve(reviews);
+            // We format this reviews
+            (reviews = results.reviews.map(
+              (review: any): ReviewInterface => {
+                return { rating: review.rating, comment: review.text };
+              },
+            )),
+              resolve(reviews);
           } else {
             reject([]);
           }

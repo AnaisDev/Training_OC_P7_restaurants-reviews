@@ -9,6 +9,7 @@ import { GooglePosition } from '../../interfaces/googlePosition';
   styleUrls: ['./googleMap.component.styl'],
 })
 export class GoogleMapComponent {
+  // default geolocation: Oulan Bator
   latitude: number = 47.9184676;
   longitude: number = 106.9177016;
   position: GooglePosition = { lat: this.latitude, lng: this.longitude };
