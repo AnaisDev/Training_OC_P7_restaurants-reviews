@@ -52,6 +52,7 @@ export class GoogleMapComponent {
   private restaurantsMapWithoutGeolocation = async (
     e: object,
   ): Promise<void> => {
+    console.error('Geolocation error : ', e);
     await this.restaurantsService.initRestaurantsMap(
       this.position,
       this.mapElement,
