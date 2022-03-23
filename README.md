@@ -1,6 +1,6 @@
 # P7-restaurants-reviews
 
-This project was created as part of the front-end application developer training with Openclassrooms in 2020.
+This Angular project was created as part of the front-end application developer training with Openclassrooms in 2020.
 
 ## Purpose :
 

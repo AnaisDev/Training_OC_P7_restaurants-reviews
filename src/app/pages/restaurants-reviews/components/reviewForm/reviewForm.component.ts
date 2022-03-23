@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
-import { RestaurantInterface } from '../../interfaces/restaurant';
-import { ReviewInterface } from '../../interfaces/review';
-import { RestaurantsService } from '../../services/restaurants.service';
+import { Component, Input } from "@angular/core";
+import { RestaurantInterface } from "../../interfaces/restaurant";
+import { ReviewInterface } from "../../interfaces/review";
+import { RestaurantsService } from "../../services/restaurants.service";
 
 @Component({
-  selector: 'review-form',
-  templateUrl: './reviewForm.component.html',
-  styleUrls: ['./reviewForm.component.styl'],
+  selector: "review-form",
+  templateUrl: "./reviewForm.component.html",
+  styleUrls: ["./reviewForm.component.styl"],
 })
 export class ReviewFormComponent {
   @Input() restaurant: RestaurantInterface;
@@ -19,16 +19,18 @@ export class ReviewFormComponent {
     this.review = {};
   }
 
+  buttonType = "submit";
+
   addRestaurantReview() {
     this.confirmation = false;
     this.error = false;
 
     // Format :
-    this.review.comment === undefined ? '' : this.review.comment;
+    this.review.comment === undefined ? "" : this.review.comment;
 
     // Check format data :
     const reviewFormatError = this.restaurantsService.returnReviewFormatError(
-      this.review,
+      this.review
     );
     if (reviewFormatError) {
       this.error = true;
@@ -42,7 +44,7 @@ export class ReviewFormComponent {
     setTimeout(() => {
       this.confirmation = false;
       this.review = {};
-      this.restaurantsService.reviewFormModal = '';
+      this.restaurantsService.reviewFormModal = "";
     }, 1000);
   }
 }

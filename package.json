@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "ng": "ng",
+    "deployGHPages": "export NODE_OPTIONS=--openssl-legacy-provider && ng deploy --base-href=/Training_OC_P7_restaurants-reviews/",
     "start": "export NODE_OPTIONS=--openssl-legacy-provider && ng serve",
     "build": "export NODE_OPTIONS=--openssl-legacy-provider && ng build",
     "test": "ng test",
