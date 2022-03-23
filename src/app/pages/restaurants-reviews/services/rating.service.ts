@@ -1,20 +1,23 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
+
+export interface RatingBar {
+  fullIcons: any[];
+  semiIcons: any[];
+  emptyIcons: any[];
+}
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: "root",
 })
 export class RatingService {
   maxRating: number = 5;
-  // fullIcons: any[] = [];
-  // semiIcons: any[] = [];
-  // emptyIcons: any[] = [];
 
   /**
    * Set how many icons to display for the rating
    * It must be use an array to use ngFor in the vue
    * @param rating : number
    */
-  setRatingIcons(rating) {
+  setRatingIcons(rating): RatingBar {
     // Number
     let fullIcons = [];
     let semiIcons = [];

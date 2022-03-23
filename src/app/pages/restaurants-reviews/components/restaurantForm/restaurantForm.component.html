@@ -1,5 +1,9 @@
 <div>
-  <form (ngSubmit)="addRestaurant()" class="restaurant-form">
+  <form
+    #restaurantForm="ngForm"
+    (submit)="addRestaurant()"
+    class="restaurant-form"
+  >
     <label for="name">Nom du restaurant : </label>
     <input
       id="name"
@@ -30,9 +34,7 @@
       [(ngModel)]="restaurantsService.newRestaurant.reviews[0].comment"
       name="comment"
     ></textarea>
-    <greenButton (click)="(submit)">
-      Ajouter
-    </greenButton>
+    <greenButton [type]="buttonType"> Ajouter </greenButton>
 
     <div *ngIf="error">
       <ul *ngFor="let e of messageErrors">

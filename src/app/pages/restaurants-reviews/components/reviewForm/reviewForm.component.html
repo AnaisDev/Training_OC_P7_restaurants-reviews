@@ -1,5 +1,9 @@
 <div>
-  <form (ngSubmit)="addRestaurantReview()" class="review-form">
+  <form
+    #reviewForm="ngForm"
+    (submit)="addRestaurantReview()"
+    class="review-form"
+  >
     <p class="restaurant-name">{{ restaurant.name }}</p>
     <label for="rating">Note : </label>
     <input
@@ -17,9 +21,7 @@
       name="comment"
       required
     ></textarea>
-    <greenButton (click)="(submit)">
-      Envoyer mon avis
-    </greenButton>
+    <greenButton [type]="buttonType"> Envoyer mon avis </greenButton>
     <p class="error" *ngIf="error">{{ messageError }}</p>
     <p class="confirmation" *ngIf="confirmation">
       Votre avis a bien été rajouté.

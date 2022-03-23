@@ -25,7 +25,7 @@
       <body>
         <modal
           [isOpen]="restaurantsService.reviewFormModal === restaurant.id"
-          (close)="restaurantsService.reviewFormModal = false"
+          (close)="restaurantsService.reviewFormModal = ''"
         >
           <h2 modalHeader>Ajouter un avis :</h2>
           <review-form modalContent [restaurant]="restaurant"></review-form>
